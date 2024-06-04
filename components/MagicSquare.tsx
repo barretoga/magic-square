@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, SafeAreaView, TextInput, View, FlatList, StyleProp, ViewStyle } from 'react-native';
+import { TextInput, View, Text } from 'react-native';
 
 export type MagicSquareProps = {
   width: string;
@@ -35,6 +35,18 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
     textAlign: 'center',
   }
 
+  const errorMessageStyle: any = {
+    fontSize: 25,
+    color: 'red',
+    margin: 'auto',
+  };
+
+  const successMessageStyle: any = {
+    fontSize: 25,
+    color: 'green',
+    margin: 'auto',
+  };
+
   function handleChange(event: any, i: number, j: number) {
     const updatedSquare = [...square];
     updatedSquare[i][j] = event.target.value;
@@ -61,12 +73,68 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
     return elements
   }
 
+  function returnMagicSquareValidation() {
+    let isValid = true;
+
+    for (let i = 0; i < square.length; i++) {
+      let sum = 0;
+      for (let j = 0; j < square[i].length; j++) {
+        sum += parseInt(square[i][j]);
+      }
+      if (sum !== 15) {
+        isValid = false;
+        break;
+      }
+    }
+
+    if (isValid) {
+      for (let i = 0; i < square.length; i++) {
+        let sum = 0;
+        for (let j = 0; j < square[i].length; j++) {
+          sum += parseInt(square[j][i]);
+        }
+        if (sum !== 15) {
+          isValid = false;
+          break;
+        }
+      }
+    }
+
+    if (isValid) {
+      let sum = 0;
+      for (let i = 0; i < square.length; i++) {
+        sum += parseInt(square[i][i]);
+      }
+      if (sum !== 15) {
+        isValid = false;
+      }
+    }
+
+    if (isValid) {
+      let sum = 0;
+      for (let i = 0; i < square.length; i++) {
+        sum += parseInt(square[i][square.length - 1 - i]);
+      }
+      if (sum !== 15) {
+        isValid = false;
+      }
+    }
+
+    return isValid ? 
+      <Text style={successMessageStyle}>The magic square is valid!</Text>
+      :
+      <Text style={errorMessageStyle}>The magic square is not valid!</Text>;
+  }
+
   return (
     <View
       style={boxStyles}
     >
       {
         returnSquareLayout()
+      }
+      {
+        returnMagicSquareValidation()
       }
     </View>
   );
