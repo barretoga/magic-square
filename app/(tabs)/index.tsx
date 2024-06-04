@@ -12,14 +12,13 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require('@/assets/images/detective.png')}
           style={styles.reactLogo}
         />
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Magic Square Calculator</ThemedText>
         <HelloWave />
-        🕵️‍♀️
       </ThemedView>
       <MagicSquare
         height='3'
@@ -35,16 +34,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    margin: 'auto',
+    marginBottom: 30
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+    top: 0,
+    height: '100%',
+    width: '100%',
     position: 'absolute',
   },
 });
