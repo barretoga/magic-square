@@ -14,6 +14,4 @@
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
-
 This is a simple app that validates if a given square matrix is a magic square or not. Work in progress, more features to be added soon.
