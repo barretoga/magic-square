@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextInput, View, Text } from 'react-native';
+import { TextInput, View, Text, Button } from 'react-native';
 
 export type MagicSquareProps = {
   width: string;
@@ -11,17 +11,28 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
     ['1', '0', '0'],
     ['2', '4', '6'],
     ['6', '2', '4']
-  ])
+  ]);
+
+  function increaseSquareSize() {
+    const newSize = square.length + 1;
+    const newSquare = Array.from({ length: newSize }, (_, i) =>
+      Array.from({ length: newSize }, (_, j) => 
+        i < square.length && j < square.length ? square[i][j] : '0'
+      )
+    );
+    setSquare(newSquare);
+  }
 
   const boxStyles: any = {
     flex: 4,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-  }
+    width: 'full',
+  };
 
   const itemStyle: any = {
-    flexBasis: '30%',
+    flexBasis: `${100 / square.length - 1}%`,
     borderColor: 'black',
     backgroundColor: 'white',
     borderRadius: 5,
@@ -33,7 +44,7 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
     justifyContent: 'center',
     fontSize: 25,
     textAlign: 'center',
-  }
+  };
 
   const errorMessageStyle: any = {
     fontSize: 25,
@@ -63,7 +74,7 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
             style={itemStyle}
             key={`line-${i}-element-${j}`}
             value={square[i][j]}
-            maxLength={1}
+            maxLength={2}
             onChange={(event) => handleChange(event, i, j)}
           />
         )
@@ -74,26 +85,28 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
   }
 
   function returnMagicSquareValidation() {
+    const n = square.length;
+    const magicSum = (n * (n * n + 1)) / 2;
     let isValid = true;
 
-    for (let i = 0; i < square.length; i++) {
+    for (let i = 0; i < n; i++) {
       let sum = 0;
-      for (let j = 0; j < square[i].length; j++) {
+      for (let j = 0; j < n; j++) {
         sum += parseInt(square[i][j]);
       }
-      if (sum !== 15) {
+      if (sum !== magicSum) {
         isValid = false;
         break;
       }
     }
 
     if (isValid) {
-      for (let i = 0; i < square.length; i++) {
+      for (let i = 0; i < n; i++) {
         let sum = 0;
-        for (let j = 0; j < square[i].length; j++) {
+        for (let j = 0; j < n; j++) {
           sum += parseInt(square[j][i]);
         }
-        if (sum !== 15) {
+        if (sum !== magicSum) {
           isValid = false;
           break;
         }
@@ -102,20 +115,20 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
 
     if (isValid) {
       let sum = 0;
-      for (let i = 0; i < square.length; i++) {
+      for (let i = 0; i < n; i++) {
         sum += parseInt(square[i][i]);
       }
-      if (sum !== 15) {
+      if (sum !== magicSum) {
         isValid = false;
       }
     }
 
     if (isValid) {
       let sum = 0;
-      for (let i = 0; i < square.length; i++) {
-        sum += parseInt(square[i][square.length - 1 - i]);
+      for (let i = 0; i < n; i++) {
+        sum += parseInt(square[i][n - 1 - i]);
       }
-      if (sum !== 15) {
+      if (sum !== magicSum) {
         isValid = false;
       }
     }
@@ -127,15 +140,18 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
   }
 
   return (
-    <View
-      style={boxStyles}
-    >
-      {
-        returnSquareLayout()
-      }
-      {
-        returnMagicSquareValidation()
-      }
+    <View>
+      <View style={boxStyles}>
+        {returnSquareLayout()}
+      </View>
+      <View style={{
+        marginBottom: 40,
+      }}>
+        <Button title="Increase Size" onPress={increaseSquareSize} />
+      </View>
+      <View>
+        {returnMagicSquareValidation()}
+      </View>
     </View>
   );
 }
