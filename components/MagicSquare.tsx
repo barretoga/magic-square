@@ -36,7 +36,7 @@ export function MagicSquare({ width, height }: MagicSquareProps) {
     borderColor: 'black',
     backgroundColor: 'white',
     borderRadius: 5,
-    margin: 2,
+    margin: 1,
     marginBottom: 15,
     height: 70,
     width: 30,
